@@ -66,7 +66,7 @@ for 15 seconds, and then disconnecting about once a minute.
 188.166.119.234 connected to TCP port 22 and did not disconnect.
 Beginning about 2019-12-07T05:45:35.055Z,
 it [made a connection averaging every 30 seconds](intervals),
-without every closing a connection.
+without ever closing a connection.
 It might have "randomized" the interval,
 since the mean interval is 30.1 sec, median 29 sec, but varies between 2.59 and 201 seconds.
 A histogram of the intervals looks a little like a normal distribution,
@@ -95,5 +95,41 @@ Quality of underground software varies immensely.
 
 ## What kind of machines do SSH scanning?
 
+Only 1691 distinct IP addresses made 121220 TCP port 22 connections.
+
 The scanner-machine TCP port numbers range from 28 to 65516 -
 it's not worthwhile to consider ephemeral port range as an OS indicator.
+
+Luckily, I have [p0f](http://lcamtuf.coredump.cx/p0f3/) running, to catch all the TPC SYN packets that
+arrive at the server on which endlessh runs.
+`p0f` found 653375 TCP SYN packets destined for port 22 during the period
+for which I have journals for endlessh.
+This doesn't make sense considered with the 121220 endlessh TCP connections:
+that's better than 5 TCP SYN packets per endlessh connection.
+I can't reconcile this.
+
+`p0f` identifies the 653375 TCP SYN packets for port 22
+as these operating systems:
+
+|----------|-------------|
+|1|FreeBSD 9.x or newer|
+|77|Linux 2.4.x-2.6.x|
+|82|Linux 2.4.x|
+|206|Windows NT kernel|
+|341|Windows XP|
+|373|Linux 2.2.x-3.x (no timestamps)|
+|418|Linux 2.6.x|
+|470|Linux 3.x|
+|499|Linux 2.2.x-3.x (barebone)|
+|1072|Linux 3.1-3.10|
+|1279|Windows 7 or 8|
+|10676|Linux 2.2.x-3.x|
+|144092|Linux 3.11 and newer|
+|493789|???|
+
+Almost 2/3 of the SYN packets are identified as "???".
+I'm not sure this means anything, as `p0f` came out in 2014,
+before Linux 4 and 5, and Windows 7, 8 and 10.
+It's interesting that Linux dominates the list of OSes that `p0f`
+can identify.
+
