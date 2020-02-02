@@ -113,6 +113,7 @@ as these operating systems:
 
 
 
+|SYN packets|Operating System|
 |----------|-------------|
 |1|FreeBSD 9.x or newer|
 |77|Linux 2.4.x-2.6.x|
