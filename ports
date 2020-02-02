@@ -1,0 +1,3 @@
+#!/bin/bash
+fgrep ACCEPT all.log | awk '{print $9}' | sed 's/port=//' |
+	sort -k1.1n | uniq -c > port.counts
