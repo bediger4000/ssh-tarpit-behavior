@@ -1,0 +1,6 @@
+#Dec 08 07:03:04 baldur endlessh[504]: 2019-12-08T14:03:04.540Z CLOSE host=107.189.10.174 port=54260 fd=4 time=25.004 bytes=35
+# Calculate mean/median of time scanners spent attached
+fgrep 'CLOSE' all.log | awk '{print $11}' | sed 's/time=//' |
+tee -a connection_ets.dat |
+sort -k1.1n |
+awk 'BEGIN{c=0;sum=0;}/^[^#]/{a[c++]=$1;sum+=$1;}END{ave=sum/c;if((c%2)==1){median=a[int(c/2)];}else{median=(a[c/2]+a[c/2-1])/2;}print sum,"	",c,"	",ave,"	",median,"	",a[0],"	",a[c-1]}'

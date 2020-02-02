@@ -1,0 +1,32 @@
+[Unit]
+Description=Endlessh SSH Tarpit
+Requires=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=90sec
+ExecStart=/usr/bin/endlessh -v
+KillSignal=SIGTERM
+
+# Stop trying to restart the service if it restarts too many times in a row
+StartLimitInterval=5min
+StartLimitBurst=4
+
+StandardOutput=journal
+StandardError=journal
+StandardInput=null
+
+PrivateTmp=false
+PrivateDevices=false
+ProtectSystem=false
+ProtectHome=false
+NoNewPrivileges=false
+PrivateUsers=false
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

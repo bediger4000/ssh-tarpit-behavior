@@ -1,0 +1,8 @@
+#!/bin/bash
+
+grep 'ACCEPT..*188.166.119.234' all.log | awk '{print $6}' |
+sed -e 's/^.*2019-12-07T//' -e 's/Z.*$//' | sed 's/:/ /g' |
+sed -e 's/^0//' -e 's/ 0/ /g'  | awk 'NR==1{last = $1*3600 + $2*60 + $3} NR>1{now = $1*3600 + $2*60 + $3; print now - last; last=now}' |
+tee -a intervals.dat |
+sort -n |
+awk 'BEGIN{c=0;sum=0;}/^[^#]/{a[c++]=$1;sum+=$1;}END{ave=sum/c;if((c%2)==1){median=a[int(c/2)];}else{median=(a[c/2]+a[c/2-1])/2;}print sum,"	",c,"	",ave,"	",median,"	",a[0],"	",a[c-1]}'

@@ -1,0 +1,4 @@
+#!/bin/bash
+cut -d' ' -f6,7 all.log |
+awk 'BEGIN{max= -1; concurrent=0} /ACCEPT/{concurrent++; if (concurrent > max) {max=concurrent;}print $1, concurrent; } /CLOSE/{concurrent--}' |
+sed 's/\.[0-9][0-9][0-9]Z//' > concurrent.dat

@@ -1,0 +1,12 @@
+set timefmt '%Y-%m-%dT%H:%M:%S'
+set xdata time
+set grid
+set title "Concurrent SSH tarpits"
+set xtics rotate by -45
+set xlabel "Date"
+set ylabel "Count of concurrent connections"
+set key off
+set xra ['2019-12-06T12:00:00':'2019-12-08T00:00:00']
+set term png size 750,500
+set out 'spike.png'
+pl 'concurrent.dat' using 1:2 with points pointtype 7 pointsize .2 lc rgb "red"

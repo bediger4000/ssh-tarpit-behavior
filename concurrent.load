@@ -1,0 +1,12 @@
+set timefmt '%Y-%m-%dT%H:%M:%S'
+set xdata time
+set grid
+set title "Concurrent SSH tarpits"
+set xtics rotate by -45
+set xlabel "Date"
+set ylabel "Count concurrent"
+set key off
+set auto
+set term png size 750,500
+set out 'concurrent.png'
+pl 'concurrent.dat' using 1:2 with points pointtype 7 pointsize .2 lc rgb "red"
