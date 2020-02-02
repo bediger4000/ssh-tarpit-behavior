@@ -152,8 +152,13 @@ Linux is said to use 32768 to 61000, Windows and many others using the IANA reco
 I don't see a visible division at 32768 or 49152 or 61000.
 <!-- Linux 5.4 and many other kernels have /proc/sys/net/ipv4/ip_local_port_range which
 when read, shows the ephemeral port range. -->
+There's maybe a hint of a division at 32768 and 61000, but you have to squint.
 This would imply that the typical SSH scanner practice is to assign client port numbers,
 rather than letting the OS's TCP stack do that.
+
+What's with the scattering of ports below 10000?
+You'd think that client port numbers at and below 1024 would set off NIDs alarms.
+Maybe that's why there's so few in the low range.
 
 ![client port number, spike](portsx.png?raw=true)
 
