@@ -5,9 +5,8 @@ This is an investigation into its effectiveness
 
 ## ssh scanners
 
-Anybody with an internet-facing server knows that an infinite number of IP addresses
-try to connect to TCP port 22,
-and if they do,
+Anybody with an internet-facing server knows that an infinite number of IP addresses try to connect to TCP port 22.
+If they do connect,
 those IP addresses try to guess user IDs and passwords.
 They will not give up.
 I have an internet-facing server,
@@ -22,19 +21,19 @@ They gave me an IPv6 address and I didn't even ask for it.
 I feel that the usual solution to SSH scanners is to run [fail2ban](https://www.fail2ban.org/wiki/index.php/Main_Page)
 which will reject and ultimate drop all packets from IP addresses
 that scan for SSH on TCP port 22.
-I feel this isn't nearly aggressive enough.
-For a while, I turned up the bad-login-timeout to about 7 seconds
+I think this isn't nearly aggressive enough.
+For a while, I turned up the PAM bad-login-timeout to about 7 seconds
 as per this [stackexchange answer](https://unix.stackexchange.com/questions/40954/how-does-one-change-the-delay-that-occurs-after-entering-an-incorrect-password#40956).
 It just didn't feel like I was accomplishing anything, though.
 
 I installed [cowrie](https://github.com/cowrie/cowrie), an SSH and telnet honeypot,
 and ran it for a few years.
 I recommend running cowrie if you want to see what kind of absolute crap
-bottom feeders do once they log in to a system with a guessed password.
-It became tiresome to keep up.
+internet bottom feeders do once they log in to a system with a guessed password.
+It became tiresome to keep up, so I quit running cowrie.
 
-So I compiled [endlessh](https://github.com/skeeto/endlessh), and wrote a [systemd unit file](endlessh.service) for it.
-Endlessh takes advantage of a feature of the SSH protocol to keep connectors "on the hook",
+I compiled [endlessh](https://github.com/skeeto/endlessh), and wrote a [systemd unit file](endlessh.service) for it.
+`endlessh` takes advantage of the SSH Banner feature of the SSH protocol to keep connectors "on the hook",
 randomly doling out small numbers of bytes at long intervals.
 The scanners never actually get to trying a login,
 if they follow the SSH protocol at all closely.
@@ -43,7 +42,7 @@ that comes from interfering with the Internet's worst people on a daily basis.
 
 ## Concurrent Tarpit Connections
 
-I collected a [systemd journal file](all.log) for endlessh.
+I collected a [systemd journal file](all.log) for `endlessh`.
 Because I wasn't clever enough to notice the "n=X/4096" annotations in the file,
 I wrote a [script](concurrent) that counts up concurrent connections:
 endlessh conveniently puts a journal entry in for every open and every close
@@ -85,7 +84,7 @@ Mean 119.1 seconds, median 17 seconds.
 Minimum connection time was 0.464 seconds,
 and  101.99.3.88 left a TCP connection open for 690172.342 seconds,
 from 2020-01-21T19:48:40.378Z to 2020-01-29T19:31:32.720Z,
-retrieving 1208000 bytes of random garbage from endlessh in the process.
+retrieving 1208000 bytes of random garbage from `endlessh` in the process.
 
 ![histogram of connection ET](histogram.png?raw=true)
 
@@ -101,11 +100,11 @@ The scanner-machine TCP port numbers range from 28 to 65516 -
 it's not worthwhile to consider ephemeral port range as an OS indicator.
 
 Luckily, I have [p0f](http://lcamtuf.coredump.cx/p0f3/) running, to catch all the TPC SYN packets that
-arrive at the server on which endlessh runs.
+arrive at the server on which `endlessh` runs.
 `p0f` found 653375 TCP SYN packets destined for port 22 during the period
-for which I have journals for endlessh.
-This doesn't make sense considered with the 121220 endlessh TCP connections:
-that's better than 5 TCP SYN packets per endlessh connection.
+for which I have journals for `endlessh`.
+This doesn't make sense considered with the 121220 `endlessh` TCP connections:
+that's better than 5 TCP SYN packets per `endlessh` connection.
 I can't reconcile this.
 
 `p0f` identifies the 653375 TCP SYN packets for port 22
@@ -133,7 +132,35 @@ as these operating systems:
 
 Almost 2/3 of the SYN packets are identified as "???".
 I'm not sure this means anything, as `p0f` came out in 2014,
-before Linux 4 and 5, and Windows 7, 8 and 10.
+before Linux 4 and 5, and Windows 10.
 It's interesting that Linux dominates the list of OSes that `p0f`
 can identify.
 
+### TCP Client Port Number
+
+I tried to visualize the SSH scanner's TCP client port numbers.
+These would usually be in the [ephemeral port range](https://en.wikipedia.org/wiki/Ephemeral_port)
+for the operating system on which the scanner software runs.
+
+![ssh scanner client port number](ports.png?raw=true)
+
+That's all the port numbers on the Y axis, time of SSH server connection on the X axis.
+There's a scattering of port numbers below 10000.
+The odd thing is the use of 10000 - 32768.
+Linux is said to use 32768 to 61000, Windows and many others using the IANA recommended range of
+49152 to 65535.
+I don't see a visible division at 32768 or 49152 or 61000.
+<!-- Linux 5.4 and many other kernels have /proc/sys/net/ipv4/ip_local_port_range which
+when read, shows the ephemeral port range. -->
+This would imply that the typical SSH scanner practice is to assign client port numbers,
+rather than letting the OS's TCP stack do that.
+
+![client port number, spike](portsx.png?raw=true)
+
+This is the same image as the one immediately above,
+with dots for SSH connections from 188.166.119.234 in red,
+and 49.88.112.72 in green.
+188.166.119.234 was the IP address that had 413 concurrent connections,
+you can see that episode in the red dots.
+You can see 49.88.112.72 connecting (every 15 seconds or so) in 3 different campaigns.
+They just happened to overlap during the massive spike.

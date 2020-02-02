@@ -1,0 +1,15 @@
+set timefmt '%Y-%m-%dT%H:%M:%S'
+set xdata time
+set grid
+set title "SSH client port number"
+set xtics rotate by -45
+set xlabel "Date"
+set ylabel "Client TCP Port Number"
+set key off
+set auto
+set term png size 750,500
+set out 'ports.png'
+pl 'ports2.dat' using 1:2 with dots
+set out 'portsx.png'
+pl 'ports2.dat' using 1:2 with dots, 'portsip1.dat' using 1:2 with dots lc rgb "red", \
+ 'portsip2.dat' using 1:2 with dots lc rgb "green",
