@@ -11,5 +11,6 @@ set term png size 750,500
 set out 'ports.png'
 pl 'ports2.dat' using 1:2 with dots
 set out 'portsx.png'
-pl 'ports2.dat' using 1:2 with dots, 'portsip1.dat' using 1:2 with dots lc rgb "red", \
- 'portsip2.dat' using 1:2 with dots lc rgb "green",
+pl 'ports2.dat' using 1:2 with dots, \
+	'portsip2.dat' using 1:2 with points pointtype 7 pointsize .2 lc rgb "green", \
+	'portsip1.dat' using 1:2 with points pointtype 7 pointsize .2 lc rgb "red"
