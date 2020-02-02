@@ -111,6 +111,8 @@ I can't reconcile this.
 `p0f` identifies the 653375 TCP SYN packets for port 22
 as these operating systems:
 
+
+
 |----------|-------------|
 |1|FreeBSD 9.x or newer|
 |77|Linux 2.4.x-2.6.x|
@@ -126,6 +128,7 @@ as these operating systems:
 |10676|Linux 2.2.x-3.x|
 |144092|Linux 3.11 and newer|
 |493789|???|
+
 
 Almost 2/3 of the SYN packets are identified as "???".
 I'm not sure this means anything, as `p0f` came out in 2014,
