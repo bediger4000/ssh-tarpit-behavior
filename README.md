@@ -181,3 +181,7 @@ I guess.
 The traffic to this repo, apparently all from reddit:
 
 ![reddit traffic](github_traffic.png?raw=true)
+
+From this I conclude that reddit moderators are either
+scared little, old ladies,
+or loons.
