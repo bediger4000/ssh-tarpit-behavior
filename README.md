@@ -169,3 +169,15 @@ and 49.88.112.72 in green.
 you can see that episode in the red dots.
 You can see 49.88.112.72 connecting (every 15 seconds or so) in 3 different campaigns.
 They just happened to overlap during the massive spike.
+
+## Traffic to this repository from reddit
+
+On 2020-02-07, I posted a link to this repo on Reddit's r/malware.
+Despite netting me 14 upvotes with 90% upvotes,
+the r/malware moderators chose to delete the post.
+I'm a little confused by this removal, cie la guerre,
+I guess.
+
+The traffic to this repo, apparently all from reddit:
+
+![reddit traffic](github_traffic.png?raw=true)
