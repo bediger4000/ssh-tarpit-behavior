@@ -172,6 +172,8 @@ They just happened to overlap during the massive spike.
 
 ## Traffic to this repository from reddit
 
+### February, 2020
+
 On 2020-02-07, I posted a link to this repo on Reddit's r/malware.
 Despite netting me 14 upvotes with 90% upvotes,
 the r/malware moderators chose to delete the post.
@@ -185,3 +187,21 @@ The traffic to this repo, apparently all from reddit:
 From this I conclude that reddit moderators are either
 scared little, old ladies,
 or loons.
+
+### September, 2020
+
+On 2020-09-17, I posted a link to this repo as a comment
+to [an r/programming article about endlessh](https://www.reddit.com/r/programming/comments/iulz8w/endlessh_an_ssh_tarpit_that_slowly_sends_an/g5pf8g9/?context=3).
+I earned 88 reddit karma for just the link,
+although there was some nonsensical pushback about it.
+
+![second reddit link traffic](traffic2.png?raw=true)
+
+This repo earned 7 github stars, and about 1300 views.
+The burst of views lasted 3 days, although on the third day,
+it got only 33 views.
+This repo had zero views for weeks before I posted the link.
+
+I'm still puzzled about why the r/malware mods deleted my post,
+while the r/programming mods left the link in place.
+The r/malware subreddit is a more logical place for this to appear.
